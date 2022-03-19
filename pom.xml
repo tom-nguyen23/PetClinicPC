@@ -511,9 +511,9 @@
                 <db.script>mysql</db.script>
                 <jpa.database>MYSQL</jpa.database>
                 <jdbc.driverClassName>com.mysql.cj.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://petclinic-fitec.mysql.database.azure.com:3306/petclinic?useUnicode=true</jdbc.url>
-                <jdbc.username>petclinic@petclinic-fitec</jdbc.username>
-                <jdbc.password>lskfdj12!dfsd</jdbc.password>
+                <jdbc.url>jdbc:mysql://192.168.1.18:3306/petclinic?useUnicode=true</jdbc.url>
+                <jdbc.username>jenkins</jdbc.username>
+                <jdbc.password>jenkins2022</jdbc.password>
             </properties>
             <dependencies>
                 <dependency>

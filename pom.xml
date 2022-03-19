@@ -551,11 +551,6 @@
             <name>Spring Milestone Repository</name>
             <url>https://repo.spring.io/milestone</url>
         </repository>
-        <repository>
-            <id>snapshots</id>
-            <name>Archiva Managed Snapshot Repository</name>
-            <url>http://192.168.1.18:9090/repository/snapshots</url>
-        </repository>
     </repositories>
 
 </project>

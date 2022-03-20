@@ -1,0 +1,52 @@
+version: "3.8"
+
+services: # adds 2 services: mysql and phpmyadmin to connect with
+  db:
+    image: mysql:5.7 # use latest version of mysql
+    container_name: db # add a name for the container
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment: # add default values, see docs for more info.
+      MYSQL_USER: jenkins
+      MYSQL_ROOT_PASSWORD: jenkins2022
+      MYSQL_PASSWORD: jenkins2022
+      MYSQL_DATABASE: petclinic # create this database on startup
+    volumes:
+      - /home/chelby911/mysql/my-db:/var/lib/mysql
+    ports:
+      - '3306:3306'
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+     - "8082:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: jenkins2022 #(Required) set the password for the root superuser account.
+      PMA_HOST: db   # define the address/hostname of the mysql server eg mysql container name.
+      PMA_USER: root # this is the root user to login on startup
+      PMA_PASSWORD: jenkins2022 # use the root password to login on startup.
+      # Create a new user on startup (optional)
+      # MYSQL_USER: newuser
+      # MYSQL_PASSWORD: mypassword
+  web:
+    depends_on:
+      - db
+    image: tomcat:9.0 #tomcat:8.0-alpine #tomcat:9.0
+    volumes:
+      - /home/chelby911/jenkins/data/workspace/petclinc_pipeline/target/petclinic.war:/usr/local/tomcat/webapps/petclinic.war
+    ports:
+      - '8083:8080'
+    deploy:
+      resources:
+        limits:
+          memory: '2048MiB'
+        reservations:
+          memory: '2048MiB'
+    environment:
+      MYSQL_ROOT_PASSWORD: jenkins2022
+      MYSQL_DATABASE: petclinic
+      MYSQL_USER: jenkins
+      MYSQL_PASSWORD: jenkins2022
+volumes: # add persistent data even if container is removed.
+  my-db:

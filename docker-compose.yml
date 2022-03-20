@@ -36,7 +36,7 @@ services: # adds 2 services: mysql and phpmyadmin to connect with
       - db
     image: tomcat:9.0 #tomcat:8.0-alpine #tomcat:9.0
     volumes:
-      - /home/akram/jenkins/data/workspace/petclinc_pipeline/target/petclinic.war:/usr/local/tomcat/webapps/petclinic.war
+      - /var/lib/jenkins/workspace/petclinic/target/petclinic.war:/usr/local/tomcat/webapps/petclinic.war
     ports:
       - '8083:8080'
     deploy:

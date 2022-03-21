@@ -111,6 +111,12 @@ pipeline {
                 sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8083/'
             }
         }
+            
+        stage('Docker compose down') {
+            steps {
+               sh "docker compose down"
+            }
+        }
     
     }
 }

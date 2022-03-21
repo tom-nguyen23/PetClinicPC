@@ -13,7 +13,7 @@ services: # adds 2 services: mysql and phpmyadmin to connect with
       MYSQL_PASSWORD: jenkins2022
       MYSQL_DATABASE: petclinic # create this database on startup
     volumes:
-      - /home/akram/mysql/my-db:/var/lib/mysql
+      - /srv/mysql/my-db:/var/lib/mysql
     ports:
       - '3306:3306'
 

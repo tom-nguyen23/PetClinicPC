@@ -108,7 +108,7 @@ pipeline {
         stage('Test Petclinic App in local VM') {
             steps {
                 sleep(time:60,unit:"SECONDS")
-                sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8083/petclinic/'
+                sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8083/'
             }
         }
     

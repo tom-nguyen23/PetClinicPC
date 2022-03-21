@@ -11,7 +11,7 @@ pipeline {
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
         // This can be http or https
-        NEXUS_PROTOCOL = "http"
+        NEXUS_PROTOCOL = "https"
         // Where your Nexus is running
         NEXUS_URL = "nexus-fitec.sof3way.fr"
         // Repository where we will upload the artifact

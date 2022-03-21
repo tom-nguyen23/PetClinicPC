@@ -101,7 +101,7 @@ pipeline {
         
         stage('Deploy in local VM before Azure deployment') {
             steps {
-                sh "docker-compose up -d"
+                sh "docker compose up -d"
             }
         }
         

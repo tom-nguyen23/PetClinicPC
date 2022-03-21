@@ -13,7 +13,7 @@ pipeline {
         // This can be http or https
         NEXUS_PROTOCOL = "http"
         // Where your Nexus is running
-        NEXUS_URL = "192.168.252.128:8081"
+        NEXUS_URL = "nexus-fitec.sof3way.fr"
         // Repository where we will upload the artifact
         NEXUS_REPOSITORY = "petclinic-repo/"
         // Jenkins credential id to authenticate to Nexus OSS
@@ -105,12 +105,12 @@ pipeline {
             }
         }
         
-        stage('Test Petclinic App in local VM') {
+        /*stage('Test Petclinic App in local VM') {
             steps {
                 sleep(time:60,unit:"SECONDS")
                 sh 'curl -s -o /dev/null -w "%{http_code}\n" http://192.168.252.128:8083/petclinic/'
             }
-        }
+        }*/
     
     }
 }

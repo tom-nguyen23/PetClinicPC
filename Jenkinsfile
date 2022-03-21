@@ -37,47 +37,22 @@ pipeline {
             }
         }
         
-        stage('build & SonarQube analysis') {
-			steps {
-				withSonarQubeEnv('sonarqube') {
-					sh "mvn clean package sonar:sonar"
-              
-				}
-			}
+        stage('SonarQube Analysis') {
+	    steps {
+                withSonarQubeEnv('sonarqube') {
+		     sh "mvn clean package sonar:sonar"
+		}
+             }
         } 
         
         stage("Quality Gate"){
-			steps {
-                    echo 'quality gate check'
-                    //waitForQualityGate abortPipeline: true 
-		    }
-		}
+	      steps {
+                   echo 'quality gate check'
+                   waitForQualityGate abortPipeline: true 
+              }
+	}       
         
-        /*
-        stage('publish') {
-            steps {
-                    
-                nexusArtifactUploader artifacts: [
-                    [
-                        artifactId: 'spring-framework-petclinic',
-                        classifier: '', 
-                        file: 'target/petclinic.war',
-                        type: 'war'
-                    ]
-                ], 
-                
-                credentialsId: 'nexus-user-credentials', 
-                groupId: 'org.springframework.samples', 
-                nexusUrl: '192.168.252.128:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http',
-                repository: 'maven-nexus-repo/', 
-                version: '1.0'
-            }
-        }
-        */
-        
-        stage("publish to nexus") {
+        stage("Publish to Nexus") {
             steps {
                 script {
                     // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps

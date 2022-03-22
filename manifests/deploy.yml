@@ -22,9 +22,24 @@ spec:
         app: petclinic
     spec:
       containers:
-      - image: acrpc.azurecr.io/petclinic:changeme_tag
+      #- image: acrpc.azurecr.io/petclinic:changeme_tag
+      - image: acrpc.azurecr.io/petclinic:35
         name: petclinic
-        resources: {}
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health.php
+        #     port: 8080
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health.php
+        #     port: 8080
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "4096Mi"
       imagePullSecrets:
         - name: acr-petclinic
 ---
@@ -44,4 +59,17 @@ spec:
     targetPort: 8080
   type: LoadBalancer
   #loadBalancerIP: 40.76.48.4
-
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: petclinic
+  namespace: petclinic
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: petclinic
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

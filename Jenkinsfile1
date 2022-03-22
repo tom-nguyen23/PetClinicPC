@@ -25,7 +25,7 @@ pipeline {
     }
     
     stages {
-        /*
+        
         stage('Clone Project') {
             steps {
               echo 'Compilation in progress ...'
@@ -33,7 +33,7 @@ pipeline {
               git 'https://github.com/Taki12/PetClinicPC'
             }
         }
-        
+        /*
         stage('Maven Build') {
             steps {
               // Run Maven on a Unix agent.
@@ -102,12 +102,13 @@ pipeline {
                 }
             }
         }
-        */
+        
         stage('checkout'){
             steps{
             checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Taki12/PetClinicPC']]])
-            }  
+            }
         }
+        */
         stage('Build docker image'){
            steps{
                 script {

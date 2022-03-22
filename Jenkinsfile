@@ -18,6 +18,10 @@ pipeline {
         NEXUS_REPOSITORY = "petclinic-repo/"
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
+        registryName="ACRPC"
+        acrpc.azurecr.io = "acrpc.azurecr.io"
+        registryCredential = "myACR"
+        dockerImage = ''
     }
     
     stages {
@@ -116,6 +120,26 @@ pipeline {
             steps {
                sh "docker compose down"
             }
+        }
+        stage('checkout'){
+            steps{
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Taki12/PetClinicPC']]])
+            }  
+        }
+        stage('Build docker image'){
+           steps{
+                script {
+                  dockerImage = docker.build registryName   
+                }
+            }
+        stage('Push image to ACR')
+           steps{
+               script{
+                   docker.withRegistry("http://${registryUrl}", registryCredential){
+                       dockerImage.push()
+                   }
+               }
+           }
         }
     
     }

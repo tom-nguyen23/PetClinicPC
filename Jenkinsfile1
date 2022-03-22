@@ -132,6 +132,7 @@ pipeline {
                   dockerImage = docker.build registryName   
                 }
             }
+        }
         stage('Push image to ACR') {
            steps{
                script{
@@ -141,7 +142,5 @@ pipeline {
                }
            }
         }
-    
     }
-}
 }

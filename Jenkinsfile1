@@ -104,8 +104,10 @@ pipeline {
         }
         
         */
+        
         stage('Build docker image'){
            steps{
+                sh "pwd && ls -al"
                 script {
                   dockerImage = docker.build("acrpc.azurecr.io/petclinic")   
                 }

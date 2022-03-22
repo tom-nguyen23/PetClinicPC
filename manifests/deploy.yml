@@ -22,8 +22,7 @@ spec:
         app: petclinic
     spec:
       containers:
-      #- image: acrpc.azurecr.io/petclinic:changeme_tag
-      - image: acrpc.azurecr.io/petclinic:35
+      - image: acrpc.azurecr.io/petclinic:changeme_tag
         name: petclinic
         # readinessProbe:
         #   httpGet:

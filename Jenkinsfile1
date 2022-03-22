@@ -107,7 +107,7 @@ pipeline {
         stage('Build docker image'){
            steps{
                 script {
-                  dockerImage = docker.build acrpc.azurecr.io/petclinic   
+                  dockerImage = docker.build("acrpc.azurecr.io/petclinic")   
                 }
             }
         }

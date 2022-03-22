@@ -33,6 +33,16 @@ pipeline {
               git 'https://github.com/Taki12/PetClinicPC'
             }
         }
+        
+        stage('Set JDBC credentials') {
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'petclinic-jdbc-login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh('sed -i "s/changeme_url/mysqldb-petclinic.mysql.database.azure.com/" pom.xml')
+                    sh('sed -i "s/changeme_username/${USERNAME}/" pom.xml')
+                    sh('sed -i "s/changeme_password/${PASSWORD}/" pom.xml')
+                }   
+            }
+        }
         /*
         stage('Maven Build') {
             steps {

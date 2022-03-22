@@ -143,5 +143,11 @@ pipeline {
                }
            }
         }
+
+        stage('Apply Kubernetes files') {
+            withKubeConfig([credentialsId: 'clusterUser_devops_team_aks-petclinic', serverUrl: 'https://aks-petclinic-24a1f2ad.hcp.eastus.azmk8s.io', namespace: 'petclinic']) {
+                sh 'kubectl apply -f manifests/'
+            }
+        }
     }
 }

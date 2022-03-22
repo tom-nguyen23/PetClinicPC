@@ -19,7 +19,7 @@ pipeline {
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
         registryName="ACRPC"
-        acrpc.azurecr.io = "acrpc.azurecr.io"
+        registryUrl = "acrpc.azurecr.io"
         registryCredential = "myACR"
         dockerImage = ''
     }

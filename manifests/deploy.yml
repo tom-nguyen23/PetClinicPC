@@ -22,7 +22,7 @@ spec:
         app: petclinic
     spec:
       containers:
-      - image: acrpc.azurecr.io/petclinic:25
+      - image: acrpc.azurecr.io/petclinic:changeme_tag
         name: petclinic
         resources: {}
       imagePullSecrets:

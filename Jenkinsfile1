@@ -120,7 +120,7 @@ pipeline {
                 script { 
                   dockerImage = docker.build("acrpc.azurecr.io/petclinic:${env.BUILD_ID}")
                 }
-                  sh "docker tag acrpc.azurecr.io/petclinic:${env.BUILD_ID} petclinic:${env.BUILD_ID}"
+                sh "docker tag acrpc.azurecr.io/petclinic:${env.BUILD_ID} petclinic:${env.BUILD_ID}"
            }
        }
         /*
@@ -146,6 +146,7 @@ pipeline {
 
         stage('Apply Kubernetes files') {
             steps {
+                sh('sed -i "s/changeme_tag/${env.BUILD_ID}/" manifests/deploy.yaml')
                 withKubeConfig([credentialsId: 'token-jenkins-robot', serverUrl: 'https://aks-petclinic-24a1f2ad.hcp.eastus.azmk8s.io', namespace: 'petclinic']) {
                     sh 'kubectl apply -f manifests/'
                 }

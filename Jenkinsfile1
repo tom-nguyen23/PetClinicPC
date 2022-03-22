@@ -107,14 +107,12 @@ pipeline {
         
         stage('Build docker image'){
            steps{
-                script {
+                script { 
                   dockerImage = docker.build("acrpc.azurecr.io/petclinic:${env.BUILD_ID}")
                 }
-            }
-            steps{
                   sh "docker tag acrpc.azurecr.io/petclinic:${env.BUILD_ID} petclinic:${env.BUILD_ID}"
-            }
-        }
+           }
+       }
         
         stage('Docker test local') {
            steps {

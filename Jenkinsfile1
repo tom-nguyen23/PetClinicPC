@@ -43,7 +43,7 @@ pipeline {
                 }   
             }
         }
-        /*
+        
         stage('Maven Build') {
             steps {
               // Run Maven on a Unix agent.
@@ -112,9 +112,6 @@ pipeline {
                 }
             }
         }
-        
-        */
-        
         stage('Build docker image'){
            steps{
                 script { 

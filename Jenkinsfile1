@@ -33,7 +33,7 @@ pipeline {
               git 'https://github.com/Taki12/PetClinicPC'
             }
         }
-        
+        /*
         stage('Maven Build') {
             steps {
               // Run Maven on a Unix agent.
@@ -103,11 +103,11 @@ pipeline {
             }
         }
         
-
+        */
         stage('Build docker image'){
            steps{
                 script {
-                  dockerImage = docker.build ${registryUrl}/petclinic   
+                  dockerImage = docker.build acrpc.azurecr.io/petclinic   
                 }
             }
         }
@@ -115,7 +115,7 @@ pipeline {
            steps {
                echo 'Docker tests in progress'
                //sh "docker version"
-               sh "docker run --rm -d --name petclinic:1.0 ${dockerImage}:${env.BUILD_ID}"
+               sh "docker run --rm -d --name petclinic:1.0 acrpc.azurecr.io/petclinic:v1"
            }
         }
         stage('Push image to ACR') {

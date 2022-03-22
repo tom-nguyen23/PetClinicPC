@@ -110,7 +110,7 @@ pipeline {
         stage('Build docker image'){
            steps{
                 script {
-                  dockerImage = docker.build ${registryUrl}/petclinic:${env.BUILD_ID}   
+                  dockerImage = docker.build ${registryUrl}/petclinic   
                 }
             }
         }

@@ -109,7 +109,8 @@ pipeline {
            steps{
                 sh "pwd && ls -al"
                 script {
-                  dockerImage = docker.build("acrpc.azurecr.io/petclinic")   
+                  //dockerImage = docker.build("acrpc.azurecr.io/petclinic:")
+                  sh "docker build -t acrpc.azurecr.io/petclinic -t petclinic ."
                 }
             }
         }
@@ -117,14 +118,14 @@ pipeline {
            steps {
                echo 'Docker tests in progress'
                //sh "docker version"
-               sh "docker run --rm -d --name petclinic:1.0 acrpc.azurecr.io/petclinic:v1"
+               sh "docker run --rm -d --name petclinic petclinic"
            }
         }
         stage('Push image to ACR') {
            steps{
                script{
                    docker.withRegistry("http://${registryUrl}", registryCredential){
-                       dockerImage.push()
+                       dockerImage.push("acrpc.azurecr.io/petclinic")
                    }
                }
            }

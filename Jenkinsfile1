@@ -114,6 +114,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Docker') {
            steps {
                echo 'Docker tests in progress'
@@ -122,7 +123,7 @@ pipeline {
                sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8085/'
                sh "docker stop petclinic"
            }
-        }
+        }*/
         stage('Push image to ACR') {
            steps{
                script{

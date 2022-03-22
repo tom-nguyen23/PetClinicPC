@@ -146,7 +146,7 @@ pipeline {
 
         stage('Apply Kubernetes files') {
             steps {
-                sh("sed -i 's/changeme_tag/${env.BUILD_ID}/' manifests/deploy.yaml")
+                sh "sed -i 's/changeme_tag/${env.BUILD_ID}/' manifests/deploy.yml"
                 withKubeConfig([credentialsId: 'token-jenkins-robot', serverUrl: 'https://aks-petclinic-24a1f2ad.hcp.eastus.azmk8s.io', namespace: 'petclinic']) {
                     sh 'kubectl apply -f manifests/'
                 }

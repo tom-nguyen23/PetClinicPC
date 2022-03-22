@@ -103,11 +103,7 @@ pipeline {
             }
         }
         
-        stage('checkout'){
-            steps{
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Taki12/PetClinicPC']]])
-            }
-        }
+
         */
         stage('Build docker image'){
            steps{

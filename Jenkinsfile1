@@ -33,7 +33,7 @@ pipeline {
               git 'https://github.com/Taki12/PetClinicPC'
             }
         }
-        /*
+        
         stage('Maven Build') {
             steps {
               // Run Maven on a Unix agent.
@@ -104,7 +104,6 @@ pipeline {
         }
         
 
-        */
         stage('Build docker image'){
            steps{
                 script {

@@ -102,25 +102,6 @@ pipeline {
                 }
             }
         }
-        
-        stage('Deploy in local VM before Azure deployment') {
-            steps {
-                sh "docker compose up -d"
-            }
-        }
-        
-        stage('Test Petclinic App in local VM') {
-            steps {
-                sleep(time:60,unit:"SECONDS")
-                sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8083/'
-            }
-        }
-            
-        stage('Docker compose down') {
-            steps {
-               sh "docker compose down"
-            }
-        }
         stage('checkout'){
             steps{
             checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Taki12/PetClinicPC']]])
@@ -132,6 +113,13 @@ pipeline {
                   dockerImage = docker.build registryName   
                 }
             }
+        }
+        stage('Docker') {
+           steps {
+               echo 'Docker tests in progress'
+               //sh "docker version"
+               //sh "docker run --rm -d --name demoapp jdoxv/demoapp:${env.BUILD_ID}"
+           }
         }
         stage('Push image to ACR') {
            steps{

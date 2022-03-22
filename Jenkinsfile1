@@ -107,23 +107,24 @@ pipeline {
         
         stage('Build docker image'){
            steps{
-                sh "pwd && ls -al"
                 script {
-                  dockerImage = docker.build("acrpc.azurecr.io/petclinic")
-                  //sh "docker build -t acrpc.azurecr.io/petclinic -t petclinic ."
+                  dockerImage = docker.build("acrpc.azurecr.io/petclinic:${env.BUILD_ID}")
                 }
             }
+            steps{
+                  sh "docker tag acrpc.azurecr.io/petclinic:${env.BUILD_ID} petclinic:${env.BUILD_ID}"
+            }
         }
-        /*
-        stage('Docker') {
+        
+        stage('Docker test local') {
            steps {
                echo 'Docker tests in progress'
                //sh "docker version"
-               sh "docker run --rm -d -p 8085:8080 --name petclinic petclinic"
+               sh "docker run --rm -d -p 8085:8080 --name petclinic petclinic:${env.BUILD_ID}"
                sh 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8085/'
                sh "docker stop petclinic"
            }
-        }*/
+        }
         stage('Push image to ACR') {
            steps{
                script{

@@ -118,7 +118,7 @@ pipeline {
            steps {
                echo 'Docker tests in progress'
                //sh "docker version"
-               //sh "docker run --rm -d --name demoapp jdoxv/demoapp:${env.BUILD_ID}"
+               sh "docker run --rm -d --name petclinic:1.0 ${dockerImage}:${env.BUILD_ID}"
            }
         }
         stage('Push image to ACR') {

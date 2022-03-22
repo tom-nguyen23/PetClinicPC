@@ -123,7 +123,7 @@ pipeline {
                   sh "docker tag acrpc.azurecr.io/petclinic:${env.BUILD_ID} petclinic:${env.BUILD_ID}"
            }
        }
-        
+        /*
         stage('Docker test local') {
            steps {
                echo 'Docker tests in progress'
@@ -133,6 +133,7 @@ pipeline {
                sh "docker stop petclinic"
            }
         }
+        */
         stage('Push image to ACR') {
            steps{
                script{

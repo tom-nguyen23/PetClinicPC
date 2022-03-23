@@ -146,7 +146,7 @@ pipeline {
                 sh "sed -i 's/changeme_tag/${env.BUILD_ID}/' manifests/deploy.yml"
                 withKubeConfig([credentialsId: 'token-jenkins-robot', serverUrl: 'https://aks-petclinic-f66b64c7.hcp.eastus.azmk8s.io', namespace: 'petclinic']) {
                     sh 'kubectl apply -f manifests/'
-                    sh 'PUBLIC_IP=$(kubectl get svc petclinic -o=jsonpath="{$.status.loadBalancer.ingress[0].ip}" && echo "The petclinic interface is available at: ${PUBLIC_IP}"'
+                    sh 'PUBLIC_IP=$(kubectl get svc petclinic -o=jsonpath="{$.status.loadBalancer.ingress[0].ip}") && echo "The petclinic interface is available at: ${PUBLIC_IP}"'
                 }
             }
         }

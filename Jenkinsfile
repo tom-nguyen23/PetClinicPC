@@ -117,10 +117,5 @@ pipeline {
                sh "docker compose down"
             }
         }
-        stage('ADD Test') {
-            steps {
-               //sh "docker compose down"
-            }
-        }
     }
 }

@@ -18,7 +18,7 @@
       #group: root
       #mode: '0644'
     tags: "pet"
-    notify: resart-tomcat
+    notify: restart-tomcat
   
   handlers:
   - name: restart-tomcat

@@ -1,0 +1,28 @@
+---
+- hosts: kube-slave1
+  become: true
+  tasks: 
+  - name: "Install Tomcat/Maven"
+    apt:
+      name:
+        - tomcat8
+      state: latest
+      update_cache: yes
+    tags: "pet"
+
+  - name: Copy war file
+    copy:
+      src: ./target/petclinic.war
+      dest: /var/lib/tomcat8/webapps/ROOT.war
+      #owner: root
+      #group: root
+      #mode: '0644'
+    tags: "pet"
+    notify: resart-tomcat
+  
+  handlers:
+  - name: restart-tomcat
+    service:
+      name: tomcat8
+      state: restarted
+      enabled: yes

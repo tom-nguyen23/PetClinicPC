@@ -1,0 +1,136 @@
+pipeline {
+    
+    agent any 
+    
+    tools {
+        maven "m3"
+        git "Default"
+    }
+    
+    environment { 
+        // This can be nexus3 or nexus2
+        NEXUS_VERSION = "nexus3"
+        // This can be http or https
+        NEXUS_PROTOCOL = "http"
+        // Where your Nexus is running
+        NEXUS_URL = "localhost:8081"
+        // Repository where we will upload the artifact
+        NEXUS_REPOSITORY = "cloud-ops"
+        // Jenkins credential id to authenticate to Nexus OSS
+        NEXUS_CREDENTIAL_ID = "jenkins"
+    }
+    
+    stages {
+        stage('Clone Project') {
+            steps {
+                echo 'Compilation in progress ...'
+                sh "pwd && ls -la"
+                git 'https://github.com/tom-nguyen23/PetClinicPC.git'
+            }
+        } 
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn clean install -P MySQL -DskipTests"
+            }
+        } 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "mvn clean package sonar:sonar"
+                }
+            }
+        } 
+        stage("Publish to Nexus") {
+            steps {
+                script {
+                    // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
+                    pom = readMavenPom file: "pom.xml";
+                    // Find built artifact under target folder
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    // Print some info from the artifact found
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    // Extract the path from the File found
+                    artifactPath = filesByGlob[0].path;
+                    // Assign to a boolean response verifying If the artifact name exists
+                    artifactExists = fileExists artifactPath;
+                    
+                    if(artifactExists) {
+                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
+                        
+                        nexusArtifactUploader(
+                            nexusVersion: NEXUS_VERSION,
+                            protocol: NEXUS_PROTOCOL,
+                            nexusUrl: NEXUS_URL,
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: NEXUS_REPOSITORY,
+                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            artifacts: [
+                                // Artifact generated such as .jar, .ear and .war files.
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: artifactPath,
+                                type: pom.packaging],
+                                
+                                // Lets upload the pom.xml file for additional information for Transitive dependencies
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+                        
+                        
+                    } else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
+                }
+            }
+        }
+        stage("Build docker image") {
+            steps {
+                script {
+                    dockerImage = docker.build("tomnguyen23/pet-clinic:${env.BUILD_ID}")
+                }
+            }
+        }
+        stage("Push image to dockerhub") {
+            steps {
+                script {
+                    docker.withRegistry("","dockerhub-cred") {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }/*
+        stage("Build docker image for ACR") {
+            steps {
+                script {
+                    dockerImage = docker.build("azurehubcontainer.azurecr.io/pet-clinic:${env.BUILD_ID}")
+                }
+            }
+        }
+        stage("Push image to ACR") {
+            steps {
+                script {
+                    docker.withRegistry("http://azurehubcontainer.azurecr.io","acr-cred") {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }*/
+        stage("Run image to Docker") {
+            steps {
+                /*sh "docker-compose up -d"*/
+                sh "docker run -d --name petclinic -p 8084:8080 tomnguyen23/pet-clinic:${env.BUILD_ID}"
+            }
+        }
+        stage("Check if application is up") {
+            steps {
+                sh "sleep 30"
+                sh "curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8084/"
+            }
+        }
+    }
+}
